@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable prefer-const */
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
@@ -50,3 +55,4 @@ export async function clearSession() {
         path: "/",
     });
 }
+

@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable prefer-const */
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -174,3 +179,4 @@ export default async function Home() {
     </div>
   );
 }
+

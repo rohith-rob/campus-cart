@@ -3,6 +3,7 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 
 type Product = {
     id: string;
@@ -77,16 +78,16 @@ export default function ProductsPage() {
             <p style={{ color: "var(--muted)", marginBottom: "32px" }}>Select from our premium hand-picked assortment.</p>
 
             <div style={{ display: "flex", gap: "12px", marginBottom: "32px", overflowX: "auto", paddingBottom: "8px", whiteSpace: "nowrap" }}>
-                <a href="/products" className="btn btn-ghost">All</a>
-                <a href="/products?category=Snacks" className="btn btn-ghost">Snacks</a>
-                <a href="/products?category=Cool Drinks" className="btn btn-ghost">Cool Drinks</a>
-                <a href="/products?category=Instant Food" className="btn btn-ghost">Instant Food</a>
-                <a href="/products?category=Stationery" className="btn btn-ghost">Stationery</a>
-                <a href="/products?category=Personal Care" className="btn btn-ghost">Personal Care</a>
-                <a href="/products?category=Girls Essentials" className="btn btn-ghost">Girls Essentials</a>
-                <a href="/products?category=Boys Essentials" className="btn btn-ghost">Boys Essentials</a>
-                <a href="/products?category=Daily Essentials" className="btn btn-ghost">Daily Essentials</a>
-                <a href="/products?category=Student Utilities" className="btn btn-ghost">Student Utilities</a>
+                <Link href="/products" className="btn btn-ghost">All</Link>
+                <Link href="/products?category=Snacks" className="btn btn-ghost">Snacks</Link>
+                <Link href="/products?category=Cool Drinks" className="btn btn-ghost">Cool Drinks</Link>
+                <Link href="/products?category=Instant Food" className="btn btn-ghost">Instant Food</Link>
+                <Link href="/products?category=Stationery" className="btn btn-ghost">Stationery</Link>
+                <Link href="/products?category=Personal Care" className="btn btn-ghost">Personal Care</Link>
+                <Link href="/products?category=Girls Essentials" className="btn btn-ghost">Girls Essentials</Link>
+                <Link href="/products?category=Boys Essentials" className="btn btn-ghost">Boys Essentials</Link>
+                <Link href="/products?category=Daily Essentials" className="btn btn-ghost">Daily Essentials</Link>
+                <Link href="/products?category=Student Utilities" className="btn btn-ghost">Student Utilities</Link>
             </div>
 
             <Suspense fallback={<div>Loading menu...</div>}>

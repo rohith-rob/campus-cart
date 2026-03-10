@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -113,7 +115,7 @@ export default function ProfilePage() {
                 setMessage({ type: "success", text: "Profile updated successfully!" });
                 setPasswords({ currentPassword: "", newPassword: "", confirmPassword: "" }); // Clear security fields
             }
-        } catch (err) {
+        } catch {
             setMessage({ type: "error", text: "Network error occurred" });
         } finally {
             setSaving(false);

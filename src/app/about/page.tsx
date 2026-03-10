@@ -20,7 +20,7 @@ export default function AboutPage() {
                     </p>
 
                     <p style={{ fontSize: '1.1rem', color: 'var(--foreground)' }}>
-                        The platform allows students to place orders through a simple website, and the requested items are delivered directly to their accommodation. Campus Cart operates with the goal of saving students' time, improving convenience, and providing reliable support during both regular and urgent situations.
+                        The platform allows students to place orders through a simple website, and the requested items are delivered directly to their accommodation. Campus Cart operates with the goal of saving students&apos; time, improving convenience, and providing reliable support during both regular and urgent situations.
                     </p>
 
                     <div style={{ height: '1px', background: 'var(--border)', margin: '16px 0' }}></div>

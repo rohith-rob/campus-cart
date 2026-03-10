@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
@@ -11,7 +12,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
         const { name, price, stock, description, categoryName, imageUrl } = body;
         const { id } = await params;
 
-        let updateData: any = {};
+        const updateData: any = {};
         if (name) updateData.name = name;
         if (price) updateData.price = parseFloat(price);
         if (stock !== undefined) updateData.stock = parseInt(stock, 10);

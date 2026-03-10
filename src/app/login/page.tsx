@@ -30,7 +30,7 @@ export default function LoginPage() {
                 const data = await res.json();
                 setError(data.error || "Login failed");
             }
-        } catch (err) {
+        } catch {
             setError("An unexpected error occurred.");
         } finally {
             setLoading(false);
@@ -75,7 +75,7 @@ export default function LoginPage() {
                 </form>
 
                 <p style={{ textAlign: "center", marginTop: "24px", fontSize: "0.9rem", color: "var(--muted)" }}>
-                    Don't have an account? <Link href="/register" style={{ color: "var(--primary)" }}>Sign up</Link>
+                    Don&apos;t have an account? <Link href="/register" style={{ color: "var(--primary)" }}>Sign up</Link>
                 </p>
             </div>
         </div>

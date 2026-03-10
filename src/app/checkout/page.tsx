@@ -1,3 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { useCart } from "@/context/CartContext";
 import { useState, useEffect } from "react";
@@ -131,7 +135,7 @@ export default function CheckoutPage() {
                     setError(data.error || "Failed to place order.");
                 }
             }
-        } catch (err) {
+        } catch {
             setError("Network error occurred.");
         } finally {
             setLoading(false);

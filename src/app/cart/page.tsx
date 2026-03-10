@@ -11,7 +11,7 @@ export default function CartPage() {
         return (
             <div className="container animate-fade-in" style={{ padding: "80px 24px", textAlign: "center" }}>
                 <h1 style={{ fontSize: "2.5rem", marginBottom: "16px" }}>Your Cart is Empty</h1>
-                <p style={{ color: "var(--muted)", marginBottom: "32px" }}>Looks like you haven't added any products yet.</p>
+                <p style={{ color: "var(--muted)", marginBottom: "32px" }}>Looks like you haven&apos;t added any products yet.</p>
                 <Link href="/products" className="btn btn-primary">Browse Menu</Link>
             </div>
         );
