@@ -45,7 +45,7 @@ export default function Navbar() {
     useEffect(() => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsMobileMenuOpen(false);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
+         
         setIsDropdownOpen(false);
     }, [pathname]);
 

@@ -41,8 +41,14 @@ function ProductList() {
             {products.map(product => (
                 <div key={product.id} className="glass-card" style={{ display: "flex", flexDirection: "column", padding: "20px" }}>
                     {product.imageUrl ? (
-                        <div style={{ height: "160px", width: "100%", borderRadius: "12px", marginBottom: "16px", overflow: "hidden", background: "rgba(255,255,255,0.05)" }}>
-                            <img src={product.imageUrl} alt={product.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        <div style={{ height: "160px", width: "100%", borderRadius: "12px", marginBottom: "16px", overflow: "hidden", background: "rgba(255,255,255,0.05)", position: 'relative' }}>
+                            <Image 
+                                src={product.imageUrl} 
+                                alt={product.name} 
+                                fill
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                style={{ objectFit: "cover" }} 
+                            />
                         </div>
                     ) : (
                         <div style={{ height: "160px", background: "rgba(255,255,255,0.05)", borderRadius: "12px", marginBottom: "16px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "3rem" }}>

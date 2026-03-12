@@ -1,18 +1,24 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 
-export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function PUT(_req: Request, { params }: { params: Promise<{ id: string }> }) {
     const session = await getSession();
     if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     try {
-        const body = await req.json();
+        const body = await _req.json();
         const { name, price, stock, description, categoryName, imageUrl } = body;
         const { id } = await params;
 
-        const updateData: any = {};
+        const updateData: Partial<{
+            name: string;
+            price: number;
+            stock: number;
+            description: string;
+            imageUrl: string;
+            categoryId: string;
+        }> = {};
         if (name) updateData.name = name;
         if (price) updateData.price = parseFloat(price);
         if (stock !== undefined) updateData.stock = parseInt(stock, 10);
@@ -34,12 +40,12 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
         });
 
         return NextResponse.json(updatedProduct);
-    } catch (error) {
+    } catch {
         return NextResponse.json({ error: "Failed to update product" }, { status: 500 });
     }
 }
 
-export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
     const session = await getSession();
     if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
@@ -49,7 +55,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
             where: { id }
         });
         return NextResponse.json({ success: true });
-    } catch (error) {
+    } catch {
         return NextResponse.json({ error: "Failed to delete product" }, { status: 500 });
     }
 }

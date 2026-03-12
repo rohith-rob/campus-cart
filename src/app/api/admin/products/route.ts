@@ -1,13 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable prefer-const */
+ 
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 
-export async function GET(req: Request) {
+export async function GET() {
     const session = await getSession();
     if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
@@ -17,7 +13,7 @@ export async function GET(req: Request) {
             orderBy: { createdAt: 'desc' }
         });
         return NextResponse.json(products);
-    } catch (error) {
+    } catch {
         return NextResponse.json({ error: "Failed to fetch products" }, { status: 500 });
     }
 }
@@ -53,8 +49,7 @@ export async function POST(req: Request) {
         });
 
         return NextResponse.json(product);
-    } catch (error) {
+    } catch {
         return NextResponse.json({ error: "Failed to create product" }, { status: 500 });
     }
 }
-

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable prefer-const */
+ 
+ 
+ 
+ 
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";

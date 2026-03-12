@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import AddToCartButton from "@/components/AddToCartButton";
 
 export default async function ProductDetailPage({ params }: { params: { id: string } }) {
@@ -33,8 +33,14 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
 
             <div className="glass-card" style={{ display: "flex", gap: "40px", flexWrap: "wrap", padding: "40px" }}>
                 {product.imageUrl ? (
-                    <div style={{ flex: "1 1 300px", minHeight: "300px", borderRadius: "16px", overflow: "hidden", background: "rgba(255,255,255,0.02)" }}>
-                        <img src={product.imageUrl} alt={product.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <div style={{ flex: "1 1 300px", minHeight: "300px", borderRadius: "16px", overflow: "hidden", background: "rgba(255,255,255,0.02)", position: 'relative' }}>
+                        <Image 
+                            src={product.imageUrl} 
+                            alt={product.name} 
+                            fill
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            style={{ objectFit: "cover" }} 
+                        />
                     </div>
                 ) : (
                     <div style={{ flex: "1 1 300px", minHeight: "300px", background: "rgba(255,255,255,0.02)", borderRadius: "16px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "6rem" }}>
@@ -114,7 +120,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                         )}
 
                         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                            {product.reviews.map((review: any) => (
+                            {product.reviews.map((review) => (
                                 <div key={review.id} style={{ padding: "24px", background: "rgba(255,255,255,0.02)", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.05)" }}>
                                     <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
                                         <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "var(--primary)", color: "white", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: "bold", fontSize: "1.2rem" }}>
