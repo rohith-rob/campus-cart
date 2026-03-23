@@ -13,6 +13,7 @@ export default function AdminDashboard() {
 
     // Product State
     const [products, setProducts] = useState<any[]>([]);
+    const [categories, setCategories] = useState<any[]>([]);
     const [editingProduct, setEditingProduct] = useState<any | null>(null);
     const [newProduct, setNewProduct] = useState({ name: '', price: '', stock: '', categoryName: '', description: '', imageUrl: '' });
 
@@ -48,9 +49,13 @@ export default function AdminDashboard() {
 
                 setAllOrders(combined);
             } else if (activeTab === 'products') {
-                const res = await fetch("/api/admin/products");
-                if (!res.ok) throw new Error("Unauthorized");
-                setProducts(await res.json());
+                const [pRes, cRes] = await Promise.all([
+                    fetch("/api/admin/products"),
+                    fetch("/api/admin/categories")
+                ]);
+                if (!pRes.ok || !cRes.ok) throw new Error("Unauthorized");
+                setProducts(await pRes.json());
+                setCategories(await cRes.json());
             }
         } catch {
             router.push("/admin/login");
@@ -357,8 +362,21 @@ export default function AdminDashboard() {
                             </div>
 
                             <div>
-                                <label style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)", marginBottom: "4px" }}>Category Exact Name (e.g. &apos;Stationery&apos;)</label>
-                                <input required type="text" className="input-field" value={editingProduct ? editingProduct.categoryName : newProduct.categoryName} onChange={e => editingProduct ? setEditingProduct({ ...editingProduct, categoryName: e.target.value }) : setNewProduct({ ...newProduct, categoryName: e.target.value })} />
+                                <label style={{ display: "block", fontSize: "0.8rem", color: "var(--muted)", marginBottom: "4px" }}>Category (Select or Type New)</label>
+                                <input 
+                                    required 
+                                    type="text" 
+                                    list="category-suggestions"
+                                    className="input-field" 
+                                    placeholder="e.g. Stationery"
+                                    value={editingProduct ? editingProduct.categoryName : newProduct.categoryName} 
+                                    onChange={e => editingProduct ? setEditingProduct({ ...editingProduct, categoryName: e.target.value }) : setNewProduct({ ...newProduct, categoryName: e.target.value })} 
+                                />
+                                <datalist id="category-suggestions">
+                                    {categories.map(c => (
+                                        <option key={c.id} value={c.name} />
+                                    ))}
+                                </datalist>
                             </div>
 
                             <div>
