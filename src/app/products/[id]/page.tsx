@@ -3,9 +3,12 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import AddToCartButton from "@/components/AddToCartButton";
+import ReviewForm from "@/components/ReviewForm";
+import { getSession } from "@/lib/session";
 
 export default async function ProductDetailPage({ params }: { params: { id: string } }) {
     const { id } = await params;
+    const session = await getSession();
     const product = await prisma.product.findUnique({
         where: { id },
         include: {
@@ -94,6 +97,19 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
                         <li>Price: ₹{product.price}</li>
                     </ul>
                 </div>
+            </div>
+            
+            {/* Review Submission Section */}
+            <div style={{ marginTop: "40px" }}>
+                {session ? (
+                    <ReviewForm productId={product.id} />
+                ) : (
+                    <div className="glass-card" style={{ padding: "40px", textAlign: "center" }}>
+                        <h3 style={{ marginBottom: "16px" }}>Want to share your thoughts?</h3>
+                        <p style={{ color: "var(--muted)", marginBottom: "24px" }}>Please log in to leave a review for this product.</p>
+                        <Link href="/login" className="btn btn-primary">Log In to Review</Link>
+                    </div>
+                )}
             </div>
 
             {/* Reviews Section */}

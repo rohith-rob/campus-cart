@@ -7,10 +7,17 @@ import { useCart } from "@/context/CartContext";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import animationData from "../../../public/images/delivery-animation.json";
+
+// Dynamically import Lottie to prevent SSR issues
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
 export default function CheckoutPage() {
     const { items, total, deliveryFee, finalTotal, clearCart } = useCart();
     const router = useRouter();
+
+    const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
 
     const [address, setAddress] = useState("");
     const [savedAddress, setSavedAddress] = useState("");
@@ -23,6 +30,7 @@ export default function CheckoutPage() {
     const [pincode, setPincode] = useState("");
     const [additionalPhone, setAdditionalPhone] = useState("");
     const [useCustomDetailedAddress, setUseCustomDetailedAddress] = useState(true);
+    const [isUrgent, setIsUrgent] = useState(false);
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -116,18 +124,23 @@ export default function CheckoutPage() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     items,
-                    totalAmount: finalTotal,
+                    totalAmount: finalTotal + (isUrgent ? 30 : 0),
                     customAddress: finalAddress,
                     paymentMethod,
-                    transactionId: paymentMethod === "UPI" ? transactionId : null
+                    transactionId: paymentMethod === "UPI" ? transactionId : null,
+                    isUrgent: isUrgent
                 })
             });
 
             if (res.ok) {
                 clearCart();
-                router.push("/dashboard");
+                setShowSuccessAnimation(true);
+                setTimeout(() => {
+                    router.push("/dashboard");
+                }, 5000);
             } else {
                 const data = await res.json();
+
                 if (res.status === 401) {
                     setError("You must be logged in to place an order. Redirecting...");
                     setTimeout(() => router.push("/login"), 2000);
@@ -232,13 +245,62 @@ export default function CheckoutPage() {
                             <span>Delivery Fee (20%)</span>
                             <span>₹{deliveryFee.toFixed(2)}</span>
                         </div>
+                        {isUrgent && (
+                            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "16px", color: "var(--primary)", fontSize: "0.95rem" }}>
+                                <span>Urgent Delivery Surcharge</span>
+                                <span>+ ₹30.00</span>
+                            </div>
+                        )}
                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "16px", color: "var(--muted)" }}>
                             <span>Order Total</span>
-                            <span style={{ fontWeight: "bold", color: "#fff", fontSize: "1.1rem" }}>₹{finalTotal.toFixed(2)}</span>
+                            <span style={{ fontWeight: "bold", color: "#fff", fontSize: "1.2rem" }}>₹{(finalTotal + (isUrgent ? 30 : 0)).toFixed(2)}</span>
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between", color: "var(--muted)", fontSize: "0.9rem" }}>
                             <span>Selected Payment</span>
                             <span>{paymentMethod === "COD" ? "Cash on Delivery" : paymentMethod === "UPI" ? "UPI Payment" : "Credit/Debit Card"}</span>
+                        </div>
+                    </div>
+
+                    {/* Delivery Speed Selection */}
+                    <div style={{ marginBottom: "32px" }}>
+                        <h3 style={{ marginBottom: "16px", fontSize: "1.1rem" }}>Delivery Speed</h3>
+                        <div style={{ display: "flex", gap: "12px" }}>
+                            <button
+                                type="button"
+                                onClick={() => setIsUrgent(false)}
+                                style={{
+                                    flex: 1,
+                                    padding: "16px",
+                                    background: !isUrgent ? "rgba(74, 222, 128, 0.1)" : "rgba(255,255,255,0.05)",
+                                    borderRadius: "12px",
+                                    border: `1px solid ${!isUrgent ? "#4ade80" : "var(--border)"}`,
+                                    color: !isUrgent ? "#4ade80" : "#fff",
+                                    cursor: "pointer",
+                                    transition: "all 0.2s",
+                                    textAlign: "left"
+                                }}
+                            >
+                                <div style={{ fontWeight: "bold" }}>Normal Delivery</div>
+                                <div style={{ fontSize: "0.8rem", opacity: 0.8 }}>Standard timing (Free)</div>
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setIsUrgent(true)}
+                                style={{
+                                    flex: 1,
+                                    padding: "16px",
+                                    background: isUrgent ? "rgba(0, 255, 204, 0.1)" : "rgba(255,255,255,0.05)",
+                                    borderRadius: "12px",
+                                    border: `1px solid ${isUrgent ? "var(--primary)" : "var(--border)"}`,
+                                    color: isUrgent ? "var(--primary)" : "#fff",
+                                    cursor: "pointer",
+                                    transition: "all 0.2s",
+                                    textAlign: "left"
+                                }}
+                            >
+                                <div style={{ fontWeight: "bold" }}>Urgent Delivery</div>
+                                <div style={{ fontSize: "0.8rem", opacity: 0.8 }}>Priority processing (+ ₹30)</div>
+                            </button>
                         </div>
                     </div>
 
@@ -346,6 +408,31 @@ export default function CheckoutPage() {
                     </button>
                 </form>
             </div>
+
+            {/* Success Animation Overlay */}
+            {showSuccessAnimation && (
+                <div style={{
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    width: "100vw",
+                    height: "100vh",
+                    background: "rgba(0, 0, 0, 0.85)",
+                    backdropFilter: "blur(10px)",
+                    zIndex: 9999,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    animation: "fadeIn 0.3s ease"
+                }}>
+                    <div style={{ width: "300px", height: "300px" }}>
+                        <Lottie animationData={animationData} loop={true} />
+                    </div>
+                    <h2 style={{ color: "#4ade80", marginTop: "20px", textShadow: "0 0 10px rgba(74, 222, 128, 0.5)" }}>Order Placed Successfully!</h2>
+                    <p style={{ color: "var(--muted)", fontSize: "1rem" }}>Sit tight, your items are on the way.</p>
+                </div>
+            )}
         </div>
     );
 }

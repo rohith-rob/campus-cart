@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
- 
- 
- 
+
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
@@ -15,7 +13,10 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
-        const { items, totalAmount, customAddress, paymentMethod, transactionId } = body;
+        const { items, totalAmount, customAddress, paymentMethod, transactionId, isUrgent } = body;
+
+        const urgentFee = isUrgent ? 30 : 0;
+        const finalTotalAmount = Number(totalAmount) + urgentFee;
 
         if (!items || !items.length) {
             return NextResponse.json({ error: "No items in order" }, { status: 400 });
@@ -35,12 +36,14 @@ export async function POST(req: Request) {
         const order = await prisma.order.create({
             data: {
                 userId: session.userId,
-                totalAmount,
+                totalAmount: finalTotalAmount,
                 status: "ORDERED",
                 deliveryLocation: customAddress || null,
                 paymentMethod: paymentMethod || "COD",
                 paymentStatus: initialPaymentStatus,
                 transactionId: transactionId || null,
+                isUrgent: !!isUrgent,
+                urgentFee: urgentFee,
                 items: {
                     create: items.map((item: any) => ({
                         productId: item.id,
@@ -66,8 +69,6 @@ export async function GET(req: Request) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        // If admin, they could fetch all. But typically we have an admin route. 
-        // This fetches current user's orders
         const orders = await prisma.order.findMany({
             where: { userId: session.userId },
             orderBy: { createdAt: "desc" },
@@ -83,4 +84,3 @@ export async function GET(req: Request) {
         return NextResponse.json({ error: "Failed to fetch orders" }, { status: 500 });
     }
 }
-

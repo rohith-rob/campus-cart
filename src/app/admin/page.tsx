@@ -260,8 +260,15 @@ export default function AdminDashboard() {
                                                     <div style={{ fontSize: "0.8rem", color: "var(--muted)" }}>{isProduct ? item.deliveryLocation : item.address}</div>
                                                 </td>
                                                 <td style={{ padding: "20px 24px" }}>
-                                                    <div style={{ display: "inline-block", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem", background: isProduct ? "rgba(0, 255, 204, 0.1)" : "rgba(167, 139, 250, 0.1)", color: isProduct ? "var(--primary)" : "#a78bfa", marginBottom: "6px" }}>
-                                                        {isProduct ? "STORE ORDER" : "PDF PRINT"}
+                                                    <div style={{ display: "flex", gap: "8px", alignItems: "center", marginBottom: "6px" }}>
+                                                        <div style={{ display: "inline-block", padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem", background: isProduct ? "rgba(0, 255, 204, 0.1)" : "rgba(167, 139, 250, 0.1)", color: isProduct ? "var(--primary)" : "#a78bfa" }}>
+                                                            {isProduct ? "STORE ORDER" : "PDF PRINT"}
+                                                        </div>
+                                                        {item.isUrgent && (
+                                                            <div style={{ padding: "4px 8px", borderRadius: "4px", fontSize: "0.75rem", background: "rgba(255, 77, 77, 0.1)", color: "#ff4d4d", fontWeight: "bold", border: "1px solid rgba(255, 77, 77, 0.3)" }}>
+                                                                URGENT
+                                                            </div>
+                                                        )}
                                                     </div>
                                                     <div style={{ fontWeight: "bold", fontSize: "1.05rem" }}>₹{Number(isProduct ? item.totalAmount : item.totalPrice).toFixed(2)}</div>
                                                 </td>

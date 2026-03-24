@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,20 +8,20 @@ datasource db {
 }
 
 model User {
-  id                String   @id @default(cuid())
+  id                String       @id @default(cuid())
   name              String
-  email             String   @unique
+  email             String       @unique
   passwordHash      String
-  role              String   @default("USER") // 'USER' or 'ADMIN'
-  avatar            String?
-  phone             String?  
-  accommodationType String?  // e.g., 'Hostel', 'PG'
-  addressDetails    String?  // e.g., 'Room 402, Block A'
+  role              String       @default("USER")
+  accommodationType String?
+  addressDetails    String?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
   collegeName       String?
   course            String?
+  phone             String?
   year              String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  avatar            String?
   orders            Order[]
   printOrders       PrintOrder[]
   reviews           Review[]
@@ -34,9 +31,9 @@ model Category {
   id        String    @id @default(cuid())
   name      String    @unique
   imageUrl  String?
-  products  Product[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  products  Product[]
 }
 
 model Product {
@@ -47,29 +44,28 @@ model Product {
   stock       Int         @default(0)
   imageUrl    String?
   categoryId  String
-  category    Category    @relation(fields: [categoryId], references: [id])
-  orderItems  OrderItem[]
-  reviews     Review[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+  orderItems  OrderItem[]
+  category    Category    @relation(fields: [categoryId], references: [id])
+  reviews     Review[]
 }
 
 model Order {
   id               String      @id @default(cuid())
   userId           String
   totalAmount      Float
-  status           String      @default("ORDERED") // ORDERED, PACKED, OUT_FOR_DELIVERY, DELIVERED
+  status           String      @default("ORDERED")
   deliveryLocation String?
   deliveryNotes    String?
-  
-  // Payment fields
-  paymentMethod    String      @default("COD") // COD, UPI, CARD
-  paymentStatus    String      @default("Pending") // Pending, Submitted, Verified, Paid, Failed
+  paymentMethod    String      @default("COD")
+  paymentStatus    String      @default("Pending")
   transactionId    String?
   paidAt           DateTime?
-
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
+  isUrgent         Boolean     @default(false)
+  urgentFee        Float       @default(0)
   user             User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   items            OrderItem[]
 }
@@ -80,32 +76,29 @@ model OrderItem {
   productId String
   quantity  Int
   price     Float
-  order     Order   @relation(fields: [orderId], references: [id])
   product   Product @relation(fields: [productId], references: [id])
+  order     Order   @relation(fields: [orderId], references: [id])
 }
 
 model PrintOrder {
-  id              String   @id @default(cuid())
+  id              String    @id @default(cuid())
   userId          String
-  fileData        String   // Base64 Encoded PDF
+  fileData        String
   fileName        String
   totalPages      Int
   copies          Int
-  colorMode       String   // "B&W" or "Color"
+  colorMode       String
   pricePerPage    Float
   totalPrice      Float
   address         String
-  orderStatus     String   @default("Uploaded") // Uploaded, Printing, Ready, Out for Delivery, Delivered
+  orderStatus     String    @default("Uploaded")
   customPageRange String?
-  
-  // Payment fields
-  paymentMethod   String   @default("COD") // COD, UPI, CARD
-  paymentStatus   String   @default("Pending") // Pending, Submitted, Verified, Paid, Failed
+  paymentMethod   String    @default("COD")
+  paymentStatus   String    @default("Pending")
   transactionId   String?
   paidAt          DateTime?
-
-  createdAt       DateTime @default(now())
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt       DateTime  @default(now())
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Review {
@@ -115,6 +108,6 @@ model Review {
   rating    Int
   comment   String?
   createdAt DateTime @default(now())
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
