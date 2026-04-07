@@ -4,17 +4,16 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { jwtVerify } from 'jose';
 
-const secretKey = process.env.SESSION_SECRET || (process.env.NODE_ENV === 'production' ? undefined : 'nextjs_dev_session_secret_1234');
-if (!secretKey) {
-    throw new Error('SESSION_SECRET environment variable is required.');
-}
+const secretKey = process.env.SESSION_SECRET || (process.env.NODE_ENV === 'production' ? '' : 'nextjs_dev_session_secret_1234');
+const key = new TextEncoder().encode(secretKey || "fallback_build_secret");
 
-const key = new TextEncoder().encode(secretKey);
-
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
     const { pathname } = req.nextUrl;
 
     if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
+        if (!secretKey && process.env.NODE_ENV === 'production') {
+            throw new Error('SESSION_SECRET environment variable is required.');
+        }
         const sessionToken = req.cookies.get('session')?.value;
 
         if (!sessionToken) {
