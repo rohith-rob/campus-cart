@@ -1,6 +1,8 @@
 import prisma from '@/lib/prisma';
 import HomePageClient from '@/components/HomePageClient';
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const featuredEssentials = await prisma.product.findMany({
     where: {
