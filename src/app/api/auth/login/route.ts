@@ -3,12 +3,16 @@ import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
 import { setSessionCookie } from "@/lib/session";
 
+const isValidEmail = (value: unknown): value is string =>
+    typeof value === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
 export async function POST(req: Request) {
     try {
-        const { email, password } = await req.json();
+        const body = await req.json();
+        const { email, password } = body;
 
-        if (!email || !password) {
-            return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+        if (!isValidEmail(email) || typeof password !== "string" || !password.trim()) {
+            return NextResponse.json({ error: "Invalid email or password" }, { status: 400 });
         }
 
         const user = await prisma.user.findUnique({ where: { email } });

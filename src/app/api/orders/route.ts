@@ -1,25 +1,54 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 
+const parsePositiveNumber = (value: unknown): number => {
+    if (typeof value === "number") return value;
+    if (typeof value === "string" && value.trim() !== "") {
+        const parsed = Number(value);
+        return Number.isFinite(parsed) ? parsed : NaN;
+    }
+    return NaN;
+};
+
 export async function POST(req: Request) {
     try {
         const session = await getSession();
-        if (!session || !session.userId) {
+        if (!session?.userId) {
             return NextResponse.json({ error: "Unauthorized. Please log in." }, { status: 401 });
         }
 
         const body = await req.json();
         const { items, totalAmount, customAddress, paymentMethod, transactionId, isUrgent } = body;
 
-        const urgentFee = isUrgent ? 30 : 0;
-        const finalTotalAmount = Number(totalAmount) + urgentFee;
-
-        if (!items || !items.length) {
+        if (!Array.isArray(items) || items.length === 0) {
             return NextResponse.json({ error: "No items in order" }, { status: 400 });
+        }
+
+        const parsedItems = items.map((item: unknown) => {
+            const inputItem = item as Record<string, unknown>;
+            return {
+                productId: String(inputItem?.id),
+                quantity: Number(inputItem?.quantity),
+                price: parsePositiveNumber(inputItem?.price)
+            };
+        });
+
+        if (
+            parsedItems.some(
+                (item) => !item.productId || item.quantity <= 0 || !Number.isFinite(item.price) || item.price < 0
+            )
+        ) {
+            return NextResponse.json({ error: "Invalid order item data" }, { status: 400 });
+        }
+
+        const parsedTotal = parsePositiveNumber(totalAmount);
+        if (!Number.isFinite(parsedTotal) || parsedTotal < 0) {
+            return NextResponse.json({ error: "Invalid total amount" }, { status: 400 });
+        }
+
+        if (customAddress && typeof customAddress !== "string") {
+            return NextResponse.json({ error: "Invalid address format" }, { status: 400 });
         }
 
         if (customAddress) {
@@ -29,9 +58,8 @@ export async function POST(req: Request) {
             });
         }
 
-        let initialPaymentStatus = "Pending";
-        if (paymentMethod === "UPI") initialPaymentStatus = "Submitted";
-        if (paymentMethod === "CARD") initialPaymentStatus = "Paid"; // Defaulting to paid for mockup card
+        const urgentFee = isUrgent ? 30 : 0;
+        const finalTotalAmount = parsedTotal + urgentFee;
 
         const order = await prisma.order.create({
             data: {
@@ -39,14 +67,14 @@ export async function POST(req: Request) {
                 totalAmount: finalTotalAmount,
                 status: "ORDERED",
                 deliveryLocation: customAddress || null,
-                paymentMethod: paymentMethod || "COD",
-                paymentStatus: initialPaymentStatus,
-                transactionId: transactionId || null,
-                isUrgent: !!isUrgent,
-                urgentFee: urgentFee,
+                paymentMethod: typeof paymentMethod === "string" ? paymentMethod : "COD",
+                paymentStatus: "Pending",
+                transactionId: typeof transactionId === "string" ? transactionId : null,
+                isUrgent: Boolean(isUrgent),
+                urgentFee,
                 items: {
-                    create: items.map((item: any) => ({
-                        productId: item.id,
+                    create: parsedItems.map((item) => ({
+                        productId: item.productId,
                         quantity: item.quantity,
                         price: item.price
                     }))
@@ -62,10 +90,10 @@ export async function POST(req: Request) {
     }
 }
 
-export async function GET(req: Request) {
+export async function GET() {
     try {
         const session = await getSession();
-        if (!session || !session.userId) {
+        if (!session?.userId) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
@@ -81,6 +109,7 @@ export async function GET(req: Request) {
 
         return NextResponse.json(orders);
     } catch (error) {
+        console.error("Order Fetch Error:", error);
         return NextResponse.json({ error: "Failed to fetch orders" }, { status: 500 });
     }
 }
