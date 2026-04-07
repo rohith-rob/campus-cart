@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 
+export const dynamic = "force-dynamic";
+
 const parsePositiveNumber = (value: unknown): number => {
     if (typeof value === "number") return value;
     if (typeof value === "string" && value.trim() !== "") {

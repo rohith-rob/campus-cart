@@ -1,0 +1,151 @@
+﻿
+> campus-cart@0.1.0 build
+> prisma generate && next build
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+
+Γ£ö Generated Prisma Client (v5.22.0) to .\node_modules\@prisma\client in 172ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Interested in query caching in just a few lines of code? Try Accelerate today! https://pris.ly/tip-3-accelerate
+
+Γû▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env
+
+node.exe : ΓÜá The "middleware" 
+file convention is deprecated. 
+Please use "proxy" instead. Learn 
+more: https://nextjs.org/docs/messag
+es/middleware-to-proxy
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Users\Rohith Roblelal\AppDat ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSp 
+   ecified: (ΓÜá The "middle...lew  
+  are-to-proxy:String) [], Remote   
+ Exception
+    + FullyQualifiedErrorId : Nativ 
+   eCommandError
+ 
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 7.9s
+  Running TypeScript ...
+  Collecting page data using 7 workers ...
+Error: SESSION_SECRET environment 
+variable is required.
+    at module evaluation 
+(C:\Users\Rohith 
+Roblelal\OneDrive\Desktop\ipr projec
+t\.next\server\chunks\_2ca5bd97._.js
+:1:41364)
+    at instantiateModule 
+(C:\Users\Rohith 
+Roblelal\OneDrive\Desktop\ipr projec
+t\.next\server\chunks\[turbopack]_ru
+ntime.js:740:9)
+    at 
+getOrInstantiateModuleFromParent 
+(C:\Users\Rohith 
+Roblelal\OneDrive\Desktop\ipr projec
+t\.next\server\chunks\[turbopack]_ru
+ntime.js:763:12)
+    at Context.esmImport [as i] 
+(C:\Users\Rohith 
+Roblelal\OneDrive\Desktop\ipr projec
+t\.next\server\chunks\[turbopack]_ru
+ntime.js:228:20)
+    at module evaluation 
+(C:\Users\Rohith 
+Roblelal\OneDrive\Desktop\ipr projec
+t\.next\server\chunks\[root-of-the-s
+erver]__36113b09._.js:1:1518)
+    at instantiateModule 
+(C:\Users\Rohith 
+Roblelal\OneDrive\Desktop\ipr projec
+t\.next\server\chunks\[turbopack]_ru
+ntime.js:740:9)
+    at instantiateRuntimeModule 
+(C:\Users\Rohith 
+Roblelal\OneDrive\Desktop\ipr projec
+t\.next\server\chunks\[turbopack]_ru
+ntime.js:768:12)
+    at 
+getOrInstantiateRuntimeModule 
+(C:\Users\Rohith 
+Roblelal\OneDrive\Desktop\ipr projec
+t\.next\server\chunks\[turbopack]_ru
+ntime.js:781:12)
+    at Object.m (C:\Users\Rohith 
+Roblelal\OneDrive\Desktop\ipr projec
+t\.next\server\chunks\[turbopack]_ru
+ntime.js:790:18)
+    at Object.<anonymous> 
+(C:\Users\Rohith 
+Roblelal\OneDrive\Desktop\ipr projec
+t\.next\server\app\api\auth\admin-lo
+gin\route.js:7:3)
+Error: SESSION_SECRET environment 
+variable is required.
+    at module evaluation 
+(C:\Users\Rohith 
+Roblelal\OneDrive\Desktop\ipr projec
+t\.next\server\chunks\_2ca5bd97._.js
+:1:41364)
+    at instantiateModule 
+(C:\Users\Rohith 
+Roblelal\OneDrive\Desktop\ipr projec
+t\.next\server\chunks\[turbopack]_ru
+ntime.js:740:9)
+    at 
+getOrInstantiateModuleFromParent 
+(C:\Users\Rohith 
+Roblelal\OneDrive\Desktop\ipr projec
+t\.next\server\chunks\[turbopack]_ru
+ntime.js:763:12)
+    at Context.esmImport [as i] 
+(C:\Users\Rohith 
+Roblelal\OneDrive\Desktop\ipr projec
+t\.next\server\chunks\[turbopack]_ru
+ntime.js:228:20)
+    at module evaluation 
+(C:\Users\Rohith 
+Roblelal\OneDrive\Desktop\ipr projec
+t\.next\server\chunks\[root-of-the-s
+erver]__432f4e69._.js:1:1517)
+    at instantiateModule 
+(C:\Users\Rohith 
+Roblelal\OneDrive\Desktop\ipr projec
+t\.next\server\chunks\[turbopack]_ru
+ntime.js:740:9)
+    at instantiateRuntimeModule 
+(C:\Users\Rohith 
+Roblelal\OneDrive\Desktop\ipr projec
+t\.next\server\chunks\[turbopack]_ru
+ntime.js:768:12)
+    at 
+getOrInstantiateRuntimeModule 
+(C:\Users\Rohith 
+Roblelal\OneDrive\Desktop\ipr projec
+t\.next\server\chunks\[turbopack]_ru
+ntime.js:781:12)
+    at Object.m (C:\Users\Rohith 
+Roblelal\OneDrive\Desktop\ipr projec
+t\.next\server\chunks\[turbopack]_ru
+ntime.js:790:18)
+    at Object.<anonymous> 
+(C:\Users\Rohith 
+Roblelal\OneDrive\Desktop\ipr projec
+t\.next\server\app\api\auth\register
+\route.js:7:3)
+
+> Build error occurred
+Error: Failed to collect page data 
+for /api/auth/admin-login
+    at ignore-listed frames {
+  type: 'Error'
+}
